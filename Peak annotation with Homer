@@ -1,0 +1,11 @@
+## Generate bed or peak file as the input file, any file can be used if contains enough information (can be after peakcalling or Deseq)
+## extract information from the file in linux
+## In BED or peak files, a dot "." can be used successfully with many tools to represent a "NULL" value for strand (this defaults to "+" when used with some tools)
+## annotatePeaks.pl in the HOMER package ignore strand information anyway
+
+cut -f1,15,16,17 input.narrowpeak > output                             ## awk, sometimes print out less rows somehow for a big file
+awk 'BEGIN{FS="\t"; OFS="\t"}{print $n,"."}' output > output2          ## add one column with "." after all columns in output file, output2 can be used directly for peak annotation
+
+
+## peak annotation with Homer
+annotatePeaks.pl output2 mm10 > UCSC_annotation                        ## Homer use UCSC as default annotation database
