@@ -1,3 +1,4 @@
+Step 1....................................................................................................
 ## Generate bed or peak file as the input file, any file can be used if contains enough information (can be after peakcalling or Deseq)
 ## extract information from the file in linux
 ## In BED or peak files, a dot "." can be used successfully with many tools to represent a "NULL" value for strand (this defaults to "+" when used with some tools)
@@ -7,5 +8,9 @@ cut -f1,15,16,17 input.narrowpeak > output                             ## awk, s
 awk 'BEGIN{FS="\t"; OFS="\t"}{print $n,"."}' output > output2          ## add one column with "." after all columns in output file, output2 can be used directly for peak annotation
 
 
+Step2....................................................................................................
 ## peak annotation with Homer
 annotatePeaks.pl output2 mm10 > UCSC_annotation                        ## Homer use UCSC as default annotation database
+
+Step3....................................................................................................
+Define distant promoter region according to distance to the nearteast TSS (-1000 ~ -20,000)
