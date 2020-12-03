@@ -1,3 +1,22 @@
 https://www.biostars.org/p/250091/
 
 https://www.biostars.org/p/180314/
+
+######
+sudo apt install bedops
+
+wget -qO- http://hgdownload.cse.ucsc.edu/goldenPath/mm10/database/refGene.txt.gz | gunzip -c - | awk 'BEGIN{ OFS="\t" }{ print $3, $5, $6, $13, $10, $4  }' - | sort-bed - > refGene.bed
+# if human , then use hg38
+
+# Then split them by strand and pad around the stranded-start position of the annotation:
+awk '($6 == "+") { print $0 }' refGene.bed | awk 'BEGIN{ OFS="\t" }($2 > 2000){ print $1, ($2 - 2000), ($2 + 2000), $4, $5, $6  }' > refGene.tss.for.padded.bed
+awk '($6 == "-") { print $0 }' refGene.bed | awk 'BEGIN{ OFS="\t" }($3 > 2000){ print $1, ($3 - 2000), ($3 + 2000), $4, $5, $6  }' > refGene.tss.rev.padded.bed
+bedops --everything refGene.tss.for.padded.bed refGene.tss.rev.padded.bed > refGene.tss.padded.bed
+
+# Generally, that could give problems if a padded TSS ends up going outside chromosomal bounds. You could filter them out with a mix of Kent and BEDOPS tools:
+# install fetch function of ucsc
+conda install -c bioconda ucsc-fetchchromsizes
+## fetch bound information
+fetchChromSizes mm10 | awk '{ print $1"\t0\t"$2; }' | sort-bed - > mm10.bounds.bed
+bedops --element-of 100% refGene.tss.padded.bed mm10.bounds.bed > refGene.tss.padded.filtered.bed
+#For 2k of padding, this is probably not a major issue. I don't believe one would generally find many genes (and their TSSs) within 2k of the tips of chromosomes. Nonetheless, this would deal with this scenario in a general way.
