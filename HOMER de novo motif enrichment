@@ -1,4 +1,5 @@
 http://homer.ucsd.edu/homer/ngs/peakMotifs.html
+http://homer.ucsd.edu/homer/motif/practicalTips.html # !!!read this before start
 
 ##prepare input file as below:
 BED files should have at minimum 6 columns (separated by TABs, additional columns will be ignored)
@@ -12,4 +13,7 @@ Column6: Strand (+/- or 0/1, where 0="+", 1="-")
 ## command
 findMotifsGenome.pl <peak/BED file> <genome> <output directory> -size # [options]
 ## Example
-findMotifsGenome.pl 282peaks_homer_list.txt mm10 282peak_motif/  -size 200 -mask -p 4 -oligo -dumpFasta
+findMotifsGenome.pl 282peaks_homer_list.txt mm10 282peak_motif/  -size 200 -p 4 -bits -S 25 -len 8,10,12 -mask -p 4 -oligo -dumpFasta
+
+#1.If there aren't any truly significant motifs when looking at short motifs, it is unlikely that you will find good long motifs either. Once you do find motifs that look promising, try looking for longer motifs.
+
