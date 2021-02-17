@@ -1,0 +1,11 @@
+https://www.biostars.org/p/430541/
+https://github.com/Ensembl/WiggleTools
+
+## wiggletools installed in py27
+
+## Bigwigs => Wiggletools Mean => bedGraph => Bigwig
+
+## Computes the mean of the subsequent list of iterators at each position:
+
+wiggletools mean test/fixedStep.bw test/variableStep.bw > test/output.bg
+
