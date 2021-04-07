@@ -1,0 +1,49 @@
+转自: https://uteric.github.io/Linux/bigwigmerge/
+
+如需将两个或多个BigWig合并成一个，可以使用bigWigMerge程序，合并完成后输出文件是bedGraph，再使用bedGraphToBigWig转回BigWig即可。
+
+一、将BigWig合并为bedGraph
+bigWigMerge f1.bigwig f2.bigwig out.bedGraph
+Got 91 chromosomes from 2 bigWigs
+Processing...........................................................................................
+运行结束后，得到一个bedGraph文件，我们来看看这个文件
+
+$ head out.bedGraph
+chr1    10000   10001   0.455257
+chr1    10001   10002   0.756229
+chr1    10002   10004   1.0572
+chr1    10004   10005   1.51246
+chr1    10005   10016   1.96771
+chr1    10016   10019   1.74008
+chr1    10019   10025   1.96771
+chr1    10025   10037   2.19534
+chr1    10037   10038   2.49632
+chr1    10038   10039   2.79729
+二、对bedGraph进行排序
+由于bedGraph文件很大，需要转换成二进制的BigWig文件，在进行转换之前，首先对其进行sort，使用sort -k1,1 -k2,2n命令：
+
+sort -k1,1 -k2,2n out.bedGraph > sort.bedGraph
+
+$ head sort.bedGraph
+chr1    10000   10001   0.455257
+chr1    10001   10002   0.756229
+chr1    10002   10004   1.0572
+chr1    10004   10005   1.51246
+chr1    10005   10016   1.96771
+chr1    10016   10019   1.74008
+chr1    10019   10025   1.96771
+chr1    10025   10037   2.19534
+chr1    10037   10038   2.49632
+chr1    10038   10039   2.79729
+三、将bedGraph转成BigWig
+下面可以使用bedGraphToBigWig转换为BigWig，需要注意的是，新生成的BigWig是原始的两个BigWig的累积，即在任何位置上的值都是输入的两个文件的总和。
+
+bedGraphToBigWig sort.bedGraph /mnt/d/ncbi/hg19/chrom/hg19.all.size out.bw
+这里需要用到hg19.all.size这个文件，这个文件只需要hg19中染色体的长度信息，第一列是染色体编号，第二列是长度
+
+chr1    249250621
+chr2    243199373
+chr3    198022430
+chr4    191154276
+chr5    180915260
+chr6    171115067
