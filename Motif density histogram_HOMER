@@ -29,7 +29,6 @@ colors <- c("PPARgamma"="blue", "RXR"="black")
           plot.title = element_text(size=12)
           )+
          geom_line(aes(y=PPARG_coverage*1000, color="PPARgamma"), size=.5)+
-         theme(legend.text = element_text())+
          geom_line(aes(y=RXR_coverage*1000, color="RXR"), size=.5)+
          #geom_line(aes(y=ATF4_coverage*1000), size=.5, color="red")+
          ylim(0,3)+
