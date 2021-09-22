@@ -1,0 +1,40 @@
+##Linux code for extracting peak distribution: (http://homer.ucsd.edu/homer/ngs/quantification.html)
+
+annotatePeaks.pl input.txt mm10 -size 4000 -hist 25 -m /home/xu/2020_PC_ChIP_seq/all_peaks_motif_XU/timecourse_DEG_mergedpeaks/pparg/known12.motif /home/xu/2020_PC_ChIP_seq/all_peaks_motif_XU/timecourse_DEG_mergedpeaks/rxr/known13.motif > pparg_rxr_DEG_outputfile_4000_25.txt
+
+-size: distance
+-hist: bins
+
+##########################################################################################################
+### To graph the output file from homer annotatPeaks.pl, extracting columns B and E if plot two motifs
+
+input <- read.delim("pparg_rxr_DEG_outputfile_4000_25.txt")
+
+input2 <- input[,c(1,2,5)]
+
+colnames(input2) <- c("distance","PPARG_coverage","RXR_coverage")
+
+library(ggplot2)
+ ## show original line
+colors <- c("PPARgamma"="blue", "RXR"="black")
+  ggplot(input2, aes(x=distance))+
+    theme_bw() +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.border = element_blank(),
+          axis.line = element_line(colour = "black"),
+          axis.text = element_text(size = 12),
+          axis.title = element_text(size=12),
+          legend.title=element_text(size=12), 
+          legend.text=element_text(size=12),
+          plot.title = element_text(size=12)
+          )+
+         geom_line(aes(y=PPARG_coverage*1000, color="PPARgamma"), size=.5)+
+         theme(legend.text = element_text())+
+         geom_line(aes(y=RXR_coverage*1000, color="RXR"), size=.5)+
+         #geom_line(aes(y=ATF4_coverage*1000), size=.5, color="red")+
+         ylim(0,3)+
+         ggtitle("Motif distribution near PPARgamma/RXR peaks") +
+         labs(x="Distance to peak summit (bp)", y="Density/1000", colors="Legend") +  # y axis is motifs per bp per peak
+         scale_color_manual(values=colors)
+     
+  #plot 3x5
