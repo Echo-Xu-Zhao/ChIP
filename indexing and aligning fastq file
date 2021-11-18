@@ -1,0 +1,27 @@
+############# Download archieved ChIP-seq raw data
+mkdir -p data
+mkdir -p refs
+mkdir -p bam
+
+esearch -db sra -query PRJNA306490 | efetch -format runinfo > runinfo.csv
+head runinfo.csv
+cat runinfo.csv| cut -f 1 -d ,                                           ####### -d: the delimiter used to seperate columns
+cat runinfo.csv| cut -f 1 -d , | grep SRR > runids.txt                  #### extract sample ID
+fastq-dump -O data --split-files -F SRR3033155                            ##### retrieve data using SRA toolkit, and split the paired-end file into two single-end files
+
+URL=http://hgdownload.cse.ucsc.edu/goldenPath/sacCer3/bigZips/chromFa.tar.gz         ###### to get the chromatin fasta file for aligning
+curl $URL | tar zxv
+cat refs/chr*.fa > ref.fa  ### merge the fasta files into one as reference
+
+curl http://hgdownload.cse.ucsc.edu/goldenPath/sacCer3/bigZips/sacCer3.chrom.sizes > sacCer3.chrom.sizes.txt      ##### to get the chromatin size
+
+############## Make index file
+bwa index ref.fa
+samtools faidx ref.fa
+
+###### get more information, like the treatment 
+esearch -db sra -query PRJNA306490| esummary &gt; summary.xml            
+cat summary.xml | xtract -pattern DocumentSummary -element Run@acc Title > summary.txt
+
+########### mapping to genome
+bwa mem -t 4 ref.fa data/SRR3033154_1.fastq | samtools sort > SRR3033154.bam    ##### Note this data is aligned in single end mode and only file 1 is used.
