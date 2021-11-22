@@ -30,3 +30,16 @@ bwa mem -t 4 ref.fa data/SRR3033154_1.fastq | samtools sort > SRR3033154.bam    
 #### Create an genome file that bedtools will require.
 samtools faidx ref.fa    #### This generates ref.fa.fai
 bedtools genomecov -ibam bam/SRR3033154.bam -g ref.fai -bg > bam/SRR3033154.bed
+
+###### Make coverage file
+# Counts within a window of 50bp.
+bamCoverage -b bam/SRR3033154.bam -o bam/SRR3033154-digitized.bw
+# Smooth the signal in a window.
+bamCoverage -b bam/SRR3033154.bam --smoothLength 300 -o bam/SRR3033154-smooth.bw
+
+##We recommend a lot of caution when applying any of these data altering,
+##methods. Use them only when there are good reasons and a well-defined
+##rationale for using them. Never “borrow” settings from another analysis or
+##publication. In general, the best bet is to use the original coverage and resort
+##to smoothing and averaging methods only if these appear to be necessary.
+
