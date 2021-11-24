@@ -1,0 +1,11 @@
+####### install liftover in ubuntu
+
+liftOver Sumo2-3_3_1.bedGraph /home/xu/2020_PC_ChIP_seq/bedgraph/mm9/mm10ToMm9.over.chain Sumo2-3_3_1.mm9.bedGraph Sumo2-3_3_1.unlifted.bedGraph
+
+
+
+#########Liftover usage:
+
+liftOver input.bed map.chain output.bed unlifted.bed
+ 
+”map.chain”( mm10ToMm9.over.chain.gz) from http://hgdownload.cse.ucsc.edu/goldenPath/mm10/liftOver/.
