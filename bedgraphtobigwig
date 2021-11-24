@@ -1,0 +1,1 @@
+bedGraphToBigWig input.bedgraph chrom.sizes.txt output.bw
