@@ -10,7 +10,7 @@ bedops --partition tmp.bed | bedmap --echo --mean --delim '\t' - tmp.bed > Sumo2
 
 bedGraphToBigWig Sumo2-3_3_1.mm9.sorted.split.bedGraph mm9.chrom.sizes.txt Sumo2-3_3_1.mm9.sorted.split.bw
 
-
+bigWigToBedGraph Sumo2-3_3_1.mm9.sorted.split.bw Sumo2-3_3_1.mm9.sorted.split.bw.bedGraph
 
 #########Liftover usage:
 
