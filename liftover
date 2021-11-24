@@ -2,10 +2,35 @@
 
 liftOver Sumo2-3_3_1.bedGraph /home/xu/2020_PC_ChIP_seq/bedgraph/mm9/mm10ToMm9.over.chain Sumo2-3_3_1.mm9.bedGraph Sumo2-3_3_1.unlifted.bedGraph
 
+sort -k1,1 -k2,2n Sumo2-3_3_1.mm9.bedGraph > Sumo2-3_3_1.mm9.sorted.bedGraph
 
+awk -vOFS="\t" '{ print $1, $2, $3, ".", $4 }'  Sumo2-3_3_1.mm9.sorted.bedGraph > tmp.bed
+
+bedops --partition tmp.bed | bedmap --echo --mean --delim '\t' - tmp.bed > Sumo2-3_3_1.mm9.sorted.split.bedGraph
 
 #########Liftover usage:
 
 liftOver input.bed map.chain output.bed unlifted.bed
  
 ”map.chain”( mm10ToMm9.over.chain.gz) from http://hgdownload.cse.ucsc.edu/goldenPath/mm10/liftOver/.
+
+###### Refer to https://www.biostars.org/p/81185/
+# 0) If you start with the wiggle file, you will need "wigToBigWig" to convert wig to bigwig;
+e.g.  wigToBigWig in.wig chrom.sizes out.bw
+
+# 1) Convert bigwig to bedGraph
+bigWigToBedGraph H3K27ac.mm9.bw H3K27ac.mm9.bedGraph
+
+# 2) Liftover from mm9 to mm10
+liftOver H3K27ac.mm9.bedGraph mm9ToMm10.over.chain H3K27ac.mm10.bedGraph unMapped
+
+# 3) Sort the bed file
+sort -k1,1 -k2,2n H3K27ac.mm10.bedGraph > H3K27ac.mm10.sort.bedGraph
+
+# 4) Fix the overlapping intervals
+# The bed file from liftover might have overlapping intervals. You will hit error if directly using bedGraphToBigWig for file conversion. In this case, you need to split the overlapping intervals and assign mean signal to a new bed file.
+awk -vOFS="\t" '{ print $1, $2, $3, ".", $4 }'  H3K27ac.mm10.sort.bedGraph > tmp.bed
+bedops --partition tmp.bed | bedmap --echo --mean --delim '\t' - tmp.bed >  H3K27ac.mm10.split.bedGraph
+
+# 5) Convert bedGraph to bigwig 
+bedGraphToBigWig H3K27ac.mm10.split.bedGraph mm10.sizes.genome H3K27ac.mm10.bw
