@@ -8,6 +8,10 @@ awk -vOFS="\t" '{ print $1, $2, $3, ".", $4 }'  Sumo2-3_3_1.mm9.sorted.bedGraph 
 
 bedops --partition tmp.bed | bedmap --echo --mean --delim '\t' - tmp.bed > Sumo2-3_3_1.mm9.sorted.split.bedGraph
 
+bedGraphToBigWig Sumo2-3_3_1.mm9.sorted.split.bedGraph mm9.chrom.sizes.txt Sumo2-3_3_1.mm9.sorted.split.bw
+
+
+
 #########Liftover usage:
 
 liftOver input.bed map.chain output.bed unlifted.bed
