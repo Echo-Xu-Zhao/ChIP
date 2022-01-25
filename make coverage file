@@ -5,4 +5,4 @@ samtools index *.sorted.bam
 
 #### Make normalized bigwig files for paird-end sequencing
 
-bamCoverage -b D0K2.sorted.bam -o D0K2.bw --normalizeUsing RPKM
+bamCoverage -b D0K2.sorted.bam -o D0K2.bw --normalizeUsing RPKM -p 2
