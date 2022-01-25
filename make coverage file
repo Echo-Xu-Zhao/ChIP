@@ -1,0 +1,8 @@
+#####https://deeptools.readthedocs.io/en/develop/content/tools/bamCoverage.html?highlight=bamcoverage#regular-bigwig-track
+#### RNAseq, index bam file, which generating a *bam.bai file
+
+samtools index *.sorted.bam
+
+#### Make normalized bigwig files for paird-end sequencing
+
+bamCoverage -b D0K2.sorted.bam -o D0K2.bw --normalizeUsing RPKM
