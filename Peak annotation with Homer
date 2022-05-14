@@ -10,7 +10,7 @@ awk 'BEGIN{FS="\t"; OFS="\t"}{print $n,"."}' output > output2          ## add on
 
 Step2....................................................................................................
 ## peak annotation with Homer
-annotatePeaks.pl output2 mm10 > UCSC_annotation                        ## Homer use UCSC as default annotation database
+annotatePeaks.pl output2 mm10 > UCSC_annotation                        ## Homer use UCSC as default annotation database, it can be specified by "hg38 -gtf Homo_sapiens.GRCh38.104.gtf"
 
 Step3....................................................................................................
 Define distant promoter region according to distance to the nearteast TSS (-1000 ~ -20,000)
