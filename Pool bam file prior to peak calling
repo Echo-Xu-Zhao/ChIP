@@ -1,0 +1,11 @@
+https://support.bioconductor.org/p/116282/
+https://support.bioconductor.org/p/72098/
+
+
+downsample each library to the same sequencing coverage with shortread
+pool bam files for replicates and input as well
+peak calling
+featurecounts to count reads for DBanalysis with DEseq2
+
+You should definitely never subtract or divide the counts you provide to DESeq2.
+I would not use the input counts at all for differential binding. I would just compare treated counts vs untreated ChIP counts.
