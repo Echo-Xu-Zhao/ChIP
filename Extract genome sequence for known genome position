@@ -1,2 +1,3 @@
 https://bedtools.readthedocs.io/en/latest/content/tools/getfasta.html
 
+bedtools getfasta -fi GRCh38.primary_assembly.genome.fa -bed Common_peaks.bed -name -fo Common_peaks.fa
